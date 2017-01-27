@@ -12,23 +12,23 @@ class Login extends React.Component {
         this.handleLogin = this.handleLogin.bind(this);
     }
 
-    handleLogin(email, pw) {
-        return this.props.loginRequest(email, pw).then(
+    handleLogin(id, pw) {
+        return this.props.loginRequest(id, pw).then(
             () => {
                 if(this.props.status === "SUCCESS") {
                     let loginData = {
                         isLoggedIn: true,
-                        email: email
+                        username: id
                     };
 
                     document.cookie = 'key=' + btoa(JSON.stringify(loginData));
 
-                    Materialize.toast('Welcome ' + email + '!', 2000);
+                    Materialize.toast('Welcome ' + id + '!', 2000);
                     browserHistory.push('/');
                     return true;
                 } else {
                     let $toastContent = $('<span style="color: #FFB4BA">Incorrect username or password</span>');
-                    Materialize.toast($toastContet, 2000);
+                    Materialize.toast($toastContent, 2000);
                     return false;
                 }
             }
@@ -53,8 +53,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginRequest: (email, pw) => {
-            return dispatch(loginRequest(email,pw));
+        loginRequest: (id, pw) => {
+            return dispatch(loginRequest(id,pw));
         }
     };
 };

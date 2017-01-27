@@ -1,23 +1,21 @@
-/**
- * Created by Terry on 2016-11-13.
- */
 import {
     SEARCH,
     SEARCH_SUCCESS,
     SEARCH_FAILURE
-} from './ActionTypes'
+} from './ActionTypes';
 import axios from 'axios';
 
 export function searchRequest(keyword) {
     return (dispatch) => {
+
         dispatch(search());
 
-        return axios.get('/api/account/search/'+keyword)
-            .then((response) => {
-                dispatch(searchSuccess(response.data));
-            }).catch((error) => {
-                dispatch(searchFailure());
-            });
+        return axios.get('/api/account/search/' + keyword)
+        .then((response) => {
+            dispatch(searchSuccess(response.data));
+        }).catch((error) => {
+            dispatch(searchFailure());
+        });
     };
 }
 
@@ -28,6 +26,7 @@ export function search() {
 }
 
 export function searchSuccess(usernames) {
+    console.log(usernames);
     return {
         type: SEARCH_SUCCESS,
         usernames

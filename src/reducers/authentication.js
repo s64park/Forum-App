@@ -37,10 +37,10 @@ export default function authentication(state, action) {
                 },
                 status: {
                     isLoggedIn: { $set: true },
-                    currentUser: { $set: action.email }
+                    currentUser: { $set: action.username }
                 }
             });
-        case types.AUTH_FAILURE:
+        case types.AUTH_LOGIN_FAILURE:
             return update(state, {
                 login: {
                     status: { $set: 'FAILURE' }
@@ -68,6 +68,8 @@ export default function authentication(state, action) {
                     error: { $set: action.error }
                 }
             });
+
+        /* getinfo */
         case types.AUTH_GET_STATUS:
             return update(state, {
                 status: {
@@ -78,7 +80,7 @@ export default function authentication(state, action) {
             return update(state, {
                 status: {
                     valid: { $set: true },
-                    currentUser: { $set: action.email}
+                    currentUser: { $set: action.username }
                 }
             });
         case types.AUTH_GET_STATUS_FAILURE:
@@ -88,11 +90,13 @@ export default function authentication(state, action) {
                     isLoggedIn: { $set: false }
                 }
             });
+
+        /* logout */
         case types.AUTH_LOGOUT:
             return update(state, {
                 status: {
                     isLoggedIn: { $set: false },
-                    currentUser: { $set: ''}
+                    currentUser: { $set: '' }
                 }
             });
         default:

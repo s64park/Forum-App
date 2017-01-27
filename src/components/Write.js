@@ -1,9 +1,7 @@
-/**
- * Created by Terry on 2016-11-10.
- */
 import React from 'react';
 
 class Write extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -21,6 +19,7 @@ class Write extends React.Component {
 
     handlePost() {
         let contents = this.state.contents;
+
         this.props.onPost(contents).then(
             () => {
                 this.setState({
@@ -30,16 +29,15 @@ class Write extends React.Component {
         );
     }
 
+
     render() {
         return (
             <div className="container write">
                 <div className="card">
                     <div className="card-content">
-                        <textarea
-                            className="materialize-textarea"
-                            placeholder="Write down your memo"
-                            value={this.state.contents}
-                            onChange={this.handleChange}></textarea>
+                        <textarea className="materialize-textarea" placeholder="Write down your memo"
+                        value={this.state.contents}
+                        onChange={this.handleChange}></textarea>
                     </div>
                     <div className="card-action">
                         <a onClick={this.handlePost}>POST</a>
@@ -55,7 +53,7 @@ Write.propTypes = {
 };
 
 Write.defaultProps = {
-    onPost: (contents) => { console.error('post function not defined');}
+    onPost: (contents) => { console.error('onPost not defined'); }
 };
 
 export default Write;

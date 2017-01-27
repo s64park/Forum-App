@@ -1,0 +1,12 @@
+{
+  "test": {
+    "PORT": 4000,
+    "MONGODB_URI": "mongodb://localhost/testSampleForum",
+    "SESSION_SECRET": "testSampleForumSecret@1@1"
+  },
+  "development": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost/sampleForum",
+    "SESSION_SECRET": "SampleForumSecret@131423W@"
+  }
+}

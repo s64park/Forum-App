@@ -15,16 +15,17 @@ class App extends React.Component {
     handleLogout() {
         this.props.logoutRequest().then(
             () => {
-                Materialize.toast('Good Bye!', 2000);
+                 Materialize.toast('Good Bye!', 2000);
 
-                // EMPTIES THE SESSION
+                 // EMPTIES THE SESSION
                 let loginData = {
                     isLoggedIn: false,
                     username: ''
                 };
-                document.cookie = 'key' + btoa(JSON.stringify(loginData));
+
+                document.cookie = 'key=' + btoa(JSON.stringify(loginData));
             }
-        )
+        );
     }
 
     handleSearch(keyword) {
@@ -39,45 +40,41 @@ class App extends React.Component {
             if (parts.length == 2) return parts.pop().split(";").shift();
         }
 
-        // get LoginData from cookie
+        // get login data from cookie
         let loginData = getCookie('key');
 
-        //if LoginData is undefined, do nothing
-        if (typeof loginData === "undefined") {
-            console.log("loginData: undefined");
-            return;
-        }
+        // if loginData is undefined, do nothing
+        if(typeof loginData === "undefined") return;
 
         // decode base64 & parse json
         loginData = JSON.parse(atob(loginData));
 
         // if not logged in, do nothing
-        if (!loginData.isLoggedIn) {
-            console.log("loginData is not loggedIn");
-            return;
-        }
+        if(!loginData.isLoggedIn) return;
 
         // page refreshed & has a session in cookie,
         // check whether this cookie is valid or not
         this.props.getStatusRequest().then(
             () => {
-                console.log(this.props.status);
-                // if session is not valid
                 if(!this.props.status.valid) {
+                    // if session is not valid
                     // logout the session
                     loginData = {
                         isLoggedIn: false,
                         username: ''
                     };
 
-                    document.cookie='key=' + btoa(JSON.stringify(loginData));
+                    document.cookie = 'key=' + btoa(JSON.stringify(loginData));
+
                     // and notify
                     let $toastContent = $('<span style="color: #FFB4BA">Your session is expired, please log in again</span>');
                     Materialize.toast($toastContent, 4000);
                 }
             }
         );
+
     }
+
     render(){
         let re = /(login|register)/;
         let isAuth = re.test(this.props.location.pathname);
@@ -85,9 +82,9 @@ class App extends React.Component {
         return (
             <div>
                 { isAuth ? undefined : <Header isLoggedIn={this.props.status.isLoggedIn}
-                                            onLogout={this.handleLogout}
-                                            onSearch={this.handleSearch}
-                                            usernames={this.props.searchResult}/> }
+                onLogout={this.handleLogout}
+                onSearch={this.handleSearch}
+                usernames={this.props.searchResults}/> }
                 { this.props.children }
             </div>
         );
@@ -98,7 +95,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         status: state.authentication.status,
-        searchResult: state.search.usernames
+        searchResults: state.search.usernames
     };
 };
 

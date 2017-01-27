@@ -15,13 +15,13 @@ import axios from 'axios';
 /* ====== AUTH ====== */
 
 /* LOGIN */
-export function loginRequest(email, password) {
+export function loginRequest(username, password) {
     return (dispatch) => {
             dispatch(login());
 
-            return axios.post('/api/account/signin', { email, password })
+            return axios.post('/api/account/signin', { username, password })
             .then((response) => {
-                dispatch(loginSuccess(email));
+                dispatch(loginSuccess(username));
             }).catch((error) => {
                 dispatch(loginFailure());
             });
@@ -34,10 +34,10 @@ export function login() {
     };
 }
 
-export function loginSuccess(email) {
+export function loginSuccess(username) {
     return {
         type: AUTH_LOGIN_SUCCESS,
-        email
+        username
     };
 }
 
@@ -48,13 +48,13 @@ export function loginFailure() {
 }
 
 /* REGISTER */
-export function registerRequest(email, password) {
+export function registerRequest(username, password) {
     return (dispatch) => {
         // inform register API is starting
         dispatch(register());
 
-        return axios.post('/api/account/signup', { email, password })
-        .then((response) => {
+        return axios.post('/api/account/signup', { username, password })
+        .then((reponse) => {
             dispatch(registerSuccess());
         }).catch((error) => {
             dispatch(registerFailure(error.response.data.code));
@@ -85,16 +85,14 @@ export function registerFailure(error) {
 
 export function getStatusRequest() {
     return (dispatch) => {
-        // inform Get status API is starting
         dispatch(getStatus());
-        return axios.get('/api/account/getInfo')
-            .then((response) => {
-                dispatch(getStatusSuccess(response.data.info.email));
-            }).catch((error) => {
-                dispatch(getStatusFailure());
-            });
+        return axios.get('/api/account/getinfo')
+        .then((response) => {
+            dispatch(getStatusSuccess(response.data.info.username));
+        }).catch((error) => {
+            dispatch(getStatusFailure());
+        });
     };
-
 }
 
 export function getStatus() {
@@ -103,10 +101,10 @@ export function getStatus() {
     };
 }
 
-export function getStatusSuccess(email) {
+export function getStatusSuccess(username) {
     return {
         type: AUTH_GET_STATUS_SUCCESS,
-        email
+        username
     };
 }
 
@@ -116,13 +114,14 @@ export function getStatusFailure() {
     };
 }
 
+
 /* LOGOUT */
 export function logoutRequest() {
     return (dispatch) => {
         return axios.post('/api/account/logout')
-            .then((response) => {
-                dispatch(logout());
-            });
+        .then((response) => {
+            dispatch(logout());
+        });
     };
 }
 

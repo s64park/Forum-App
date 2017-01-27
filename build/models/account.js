@@ -14,12 +14,10 @@ var _bcryptjs2 = _interopRequireDefault(_bcryptjs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-require('mongoose-type-email');
-
 var Schema = _mongoose2.default.Schema;
 
 var Account = new Schema({
-    email: { type: _mongoose2.default.SchemaTypes.Email, required: true },
+    username: String,
     password: String,
     created: { type: Date, default: Date.now }
 });

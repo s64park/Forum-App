@@ -11,8 +11,8 @@ class Register extends React.Component {
         this.handleRegister = this.handleRegister.bind(this);
     }
 
-    handleRegister(email, pw) {
-        return this.props.registerRequest(email, pw).then(
+    handleRegister(id, pw) {
+        return this.props.registerRequest(id, pw).then(
             () => {
                 if(this.props.status === "SUCCESS") {
                     Materialize.toast('Success! Please log in', 2000);
@@ -26,9 +26,9 @@ class Register extends React.Component {
                            3: USERNAME EXISTS
                    */
                    let errorMessage = [
-                       'Invalid email',
+                       'Invalid Username',
                        'Password is too short',
-                       'email already exists'
+                       'Username already exists'
                    ];
 
                    let $toastContent = $('<span style="color: #FFB4BA">' + errorMessage[this.props.errorCode - 1] + '</span>');
@@ -56,8 +56,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        registerRequest: (email, pw) => {
-            return dispatch(registerRequest(email,pw));
+        registerRequest: (id, pw) => {
+            return dispatch(registerRequest(id,pw));
         }
     };
 };

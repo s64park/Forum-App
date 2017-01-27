@@ -13,5 +13,4 @@ const Memo = new Schema({
     is_edited: { type: Boolean, default: false }
 });
 
-
 export default mongoose.model('memo', Memo);

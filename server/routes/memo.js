@@ -194,8 +194,7 @@ router.get('/', (req, res) => {
 
 /*
     READ ADDITIONAL (OLD/NEW) MEMO: GET /api/memo/:listType/:id
- */
-
+*/
 router.get('/:listType/:id', (req, res) => {
     let listType = req.params.listType;
     let id = req.params.id;
@@ -221,35 +220,35 @@ router.get('/:listType/:id', (req, res) => {
     if(listType === 'new') {
         // GET NEWER MEMO
         Memo.find({ _id: { $gt: objId }})
-            .sort({_id: -1})
-            .limit(6)
-            .exec((err, memos) => {
-                if(err) throw err;
-                return res.json(memos);
-            });
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, memos) => {
+            if(err) throw err;
+            return res.json(memos);
+        });
     } else {
         // GET OLDER MEMO
         Memo.find({ _id: { $lt: objId }})
-            .sort({_id: -1})
-            .limit(6)
-            .exec((err, memos) => {
-                if(err) throw err;
-                return res.json(memos);
-            });
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, memos) => {
+            if(err) throw err;
+            return res.json(memos);
+        });
     }
 });
+
 
 /*
     TOGGLES STAR OF MEMO: POST /api/memo/star/:id
     ERROR CODES
-        1. INVALID ID
-        2. NOT LOGGED IN
-        3. NO RESOURCE
- */
-
+        1: INVALID ID
+        2: NOT LOGGED IN
+        3: NO RESOURCE
+*/
 router.post('/star/:id', (req, res) => {
     // CHECK MEMO ID VALIDITY
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
             error: "INVALID ID",
             code: 1
@@ -257,7 +256,7 @@ router.post('/star/:id', (req, res) => {
     }
 
     // CHECK LOGIN STATUS
-    if (typeof req.session.loginInfo === "undefined") {
+    if(typeof req.session.loginInfo === 'undefined') {
         return res.status(403).json({
             error: "NOT LOGGED IN",
             code: 2
@@ -266,11 +265,11 @@ router.post('/star/:id', (req, res) => {
 
     // FIND MEMO
     Memo.findById(req.params.id, (err, memo) => {
-        if (err) throw err;
+        if(err) throw err;
 
-        //MEMO DOES NOT EXIST
+        // MEMO DOES NOT EXIST
         if(!memo) {
-            return res.status(400).json({
+            return res.status(404).json({
                 error: "NO RESOURCE",
                 code: 3
             });
@@ -282,7 +281,7 @@ router.post('/star/:id', (req, res) => {
         // CHECK WHETHER THE USER ALREADY HAS GIVEN A STAR
         let hasStarred = (index === -1) ? false : true;
 
-        if (!hasStarred) {
+        if(!hasStarred) {
             // IF IT DOES NOT EXIST
             memo.starred.push(req.session.loginInfo.username);
         } else {
@@ -292,41 +291,39 @@ router.post('/star/:id', (req, res) => {
 
         // SAVE THE MEMO
         memo.save((err, memo) => {
-            if (err) throw err;
+            if(err) throw err;
             res.json({
                 success: true,
                 'has_starred': !hasStarred,
-                memo
+                memo,
             });
         });
     });
 });
 
-
 /*
     READ MEMO OF A USER: GET /api/memo/:username
- */
-
-router.get('/:username', (req, res) =>{
+*/
+router.get('/:username', (req, res) => {
     Memo.find({writer: req.params.username})
-        .sort({"_id": -1})
-        .limit(6)
-        .exec((err, memos) => {
-            if (err) throw err;
-            res.json(memos);
-        });
+    .sort({"_id": -1})
+    .limit(6)
+    .exec((err, memos) => {
+        if(err) throw err;
+        res.json(memos);
+    });
 });
 
-/*
-    READ ADDITIONAL (OLD/NEW) MEMO A USER: GET /api/memo/:username/:listType/:id
- */
 
+/*
+    READ ADDITIONAL (OLD/NEW) MEMO OF A USER: GET /api/memo/:username/:listType/:id
+*/
 router.get('/:username/:listType/:id', (req, res) => {
     let listType = req.params.listType;
     let id = req.params.id;
 
     // CHECK LIST TYPE VALIDITY
-    if (listType !== 'old' && listType !== 'new') {
+    if(listType !== 'old' && listType !== 'new') {
         return res.status(400).json({
             error: "INVALID LISTTYPE",
             code: 1
@@ -334,7 +331,7 @@ router.get('/:username/:listType/:id', (req, res) => {
     }
 
     // CHECK MEMO ID VALIDITY
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if(!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({
             error: "INVALID ID",
             code: 2
@@ -343,26 +340,25 @@ router.get('/:username/:listType/:id', (req, res) => {
 
     let objId = new mongoose.Types.ObjectId(req.params.id);
 
-    if (listType === 'new') {
-        //GET NEWER MEMO
-        Memo.find({ writer: req.params.username, _id: { $gt: objId} })
-            .sort({_id: -1})
-            .limit(6)
-            .exec((err, memos) => {
-                if (err) throw err;
-                return res.json(memos);
-            });
-    }
-    else {
+    if(listType === 'new') {
+        // GET NEWER MEMO
+        Memo.find({ writer: req.params.username, _id: { $gt: objId }})
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, memos) => {
+            if(err) throw err;
+            return res.json(memos);
+        });
+    } else {
         // GET OLDER MEMO
-        Memo.find({ writer: req.params.username, _id: { $lt: objId} })
-            .sort({_id: -1})
-            .limit(6)
-            .exec((err, memos) => {
-                if (err) throw err;
-                return res.json(memos);
-            });
+        Memo.find({ writer: req.params.username, _id: { $lt: objId }})
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, memos) => {
+            if(err) throw err;
+            return res.json(memos);
+        });
     }
-
 });
+
 export default router;

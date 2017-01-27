@@ -22,16 +22,15 @@ var router = _express2.default.Router();
     ERROR CODES:
         1: BAD USERNAME
         2: BAD PASSWORD
-        3: USERNAME EXISTS
+        3: USERNAM EXISTS
 */
 router.post('/signup', function (req, res) {
     // CHECK USERNAME FORMAT
-    //let usernameRegex = /^[a-z0-9]+$/;
-    var emailRegex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+    var usernameRegex = /^[a-z0-9]+$/;
 
-    if (!emailRegex.test(req.body.email)) {
+    if (!usernameRegex.test(req.body.username)) {
         return res.status(400).json({
-            error: "BAD EMAIL",
+            error: "BAD USERNAME",
             code: 1
         });
     }
@@ -45,18 +44,18 @@ router.post('/signup', function (req, res) {
     }
 
     // CHECK USER EXISTANCE
-    _account2.default.findOne({ email: req.body.email }, function (err, exists) {
+    _account2.default.findOne({ username: req.body.username }, function (err, exists) {
         if (err) throw err;
         if (exists) {
             return res.status(409).json({
-                error: "EMAIL EXISTS",
+                error: "USERNAME EXISTS",
                 code: 3
             });
         }
 
         // CREATE ACCOUNT
         var account = new _account2.default({
-            email: req.body.email,
+            username: req.body.username,
             password: req.body.password
         });
 
@@ -72,7 +71,7 @@ router.post('/signup', function (req, res) {
 
 /*
     ACCOUNT SIGNIN: POST /api/account/signin
-    BODY SAMPLE: { "email": "test", "password": "test" }
+    BODY SAMPLE: { "username": "test", "password": "test" }
     ERROR CODES:
         1: LOGIN FAILED
 */
@@ -85,8 +84,8 @@ router.post('/signin', function (req, res) {
         });
     }
 
-    // FIND THE USER BY EMAIL
-    _account2.default.findOne({ email: req.body.email }, function (err, account) {
+    // FIND THE USER BY USERNAME
+    _account2.default.findOne({ username: req.body.username }, function (err, account) {
         if (err) throw err;
 
         // CHECK ACCOUNT EXISTANCY
@@ -109,7 +108,7 @@ router.post('/signin', function (req, res) {
         var session = req.session;
         session.loginInfo = {
             _id: account._id,
-            email: account.email
+            username: account.username
         };
 
         // RETURN SUCCESS
@@ -139,12 +138,12 @@ router.post('/logout', function (req, res) {
     req.session.destroy(function (err) {
         if (err) throw err;
     });
-    return res.json({ success: true });
+    return res.json({ sucess: true });
 });
 
 /*
     SEARCH USER: GET /api/account/search/:username
- */
+*/
 router.get('/search/:username', function (req, res) {
     // SEARCH USERNAMES THAT STARTS WITH GIVEN KEYWORD USING REGEX
     var re = new RegExp('^' + req.params.username);
@@ -154,7 +153,7 @@ router.get('/search/:username', function (req, res) {
     });
 });
 
-//EMPTY SEARCH REQUEST: GET /api/account/search
+// EMPTY SEARCH REQUEST: GET /api/account/search
 router.get('/search', function (req, res) {
     res.json([]);
 });

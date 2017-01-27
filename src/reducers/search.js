@@ -1,6 +1,3 @@
-/**
- * Created by Terry on 2016-11-13.
- */
 import * as types from 'actions/ActionTypes';
 import update from 'react-addons-update';
 
@@ -9,24 +6,23 @@ const initialState = {
     usernames: []
 };
 
-export default function research(state, action){
-    if (typeof state === "undefined") {
+export default function search(state, action) {
+    if(typeof state === "undefined")
         state = initialState;
-    }
 
-    switch(action.type){
+    switch(action.type) {
         case types.SEARCH:
             return update(state, {
-                status: { $set: 'WAITING'}
+                status: { $set: 'WAITING' }
             });
         case types.SEARCH_SUCCESS:
             return update(state, {
-                status: { $set: 'SUCCESS'},
+                status: { $set: 'SUCCESS' },
                 usernames: { $set: action.usernames }
             });
         case types.SEARCH_FAILURE:
             return update(state, {
-                status: { $set: 'FAILURE'},
+                status: { $set: 'FAILURE' },
                 usernames: []
             });
         default:

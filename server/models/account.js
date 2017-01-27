@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-require('mongoose-type-email');
 
 const Schema = mongoose.Schema;
 
 const Account = new Schema({
-    email: { type: mongoose.SchemaTypes.Email, required: true},
+    username: String,
     password: String,
     created: { type: Date, default: Date.now }
 });

@@ -4,18 +4,22 @@ import { Search } from 'components';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class Header extends React.Component {
+
     constructor(props) {
         super(props);
-        /* IMPLEMENT: CREATE A SEARCH STATUS */
+
+        // IMPLEMENT: CREATE A SEARCH STATUS
+
         this.state = {
-            searchStatus: false
+            search: false
         };
+
         this.toggleSearch = this.toggleSearch.bind(this);
     }
 
     toggleSearch() {
         this.setState({
-            searchStatus: !this.state.searchStatus
+            search: !this.state.search
         });
     }
 
@@ -37,10 +41,10 @@ class Header extends React.Component {
             <div>
                 <nav>
                     <div className="nav-wrapper blue darken-1">
-                        <Link to="/" className="brand-logo center">MEMOPAD</Link>
+                        <Link to="/" className="brand-logo center">GymInst Forum</Link>
 
                         <ul>
-                            <li><a onClick={this.toggleSearch}><i className="material-icons" >search</i></a></li>
+                            <li><a onClick={this.toggleSearch}><i className="material-icons">search</i></a></li>
                         </ul>
 
                         <div className="right">
@@ -51,8 +55,10 @@ class Header extends React.Component {
                     </div>
                 </nav>
                     <ReactCSSTransitionGroup transitionName="search" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-                        {/* IMPLEMENT: SHOW SEARCH WHEN SEARCH STATUS IS TRUE */}
-                        {this.state.searchStatus ? <Search onClose={this.toggleSearch} onSearch={this.props.onSearch} usernames={this.props.usernames}/> : undefined }
+                        { /* IMPLEMENT: SHOW SEARCH WHEN SEARCH STATUS IS TRUE */}
+                        {this.state.search ? <Search onClose={this.toggleSearch}
+                        onSearch={this.props.onSearch}
+                        usernames={this.props.usernames}/> : undefined }
                     </ReactCSSTransitionGroup>
             </div>
         );
@@ -62,14 +68,12 @@ class Header extends React.Component {
 Header.propTypes = {
     isLoggedIn: React.PropTypes.bool,
     onLogout: React.PropTypes.func,
-    onSearch: React.PropTypes.func,
     usernames: React.PropTypes.array
 };
 
 Header.defaultProps = {
     isLoggedIn: false,
     onLogout: () => { console.error("logout function not defined");},
-    onSearch: (username) => {console.error("search function not defined");},
     usernames: []
 };
 
